@@ -95,9 +95,15 @@ public class Receptionist extends Application {
         
         TextField bloodTextField = new TextField();
         grid.add(bloodTextField, 1, 8);
+        
+        Label dateLabel = new Label("Date:");
+        grid.add(dateLabel, 0, 9);
+        
+        TextField dateTextField = new TextField();
+        grid.add(dateTextField, 1, 9);
 
         Button saveButton = new Button("Save");
-        grid.add(saveButton, 1, 9);
+        grid.add(saveButton, 1, 10);
 
         
         saveButton.setOnAction(e -> {
@@ -107,8 +113,11 @@ public class Receptionist extends Application {
             String weight = weightTextField.getText();
             int age = Integer.parseInt(ageTextField.getText());
             String allergies = emailTextField.getText();
-            deletePatient(name, birthday, height, weight, age, allergies);
-            savePatientInformation(name, birthday, height, weight, age, allergies);
+            int temp = Integer.parseInt(bodyTempTextField.getText());
+            String bloodP = bloodTextField.getText();
+            String date = dateTextField.getText();
+            //deletePatient(name, birthday, height, weight, age, allergies);
+            savePatientInformation(name, birthday, height, weight, age, allergies, temp, bloodP, date);
             
         });
 
@@ -148,13 +157,13 @@ public class Receptionist extends Application {
         }
     }
 
-    private void savePatientInformation(String name, String birthday, String height, String weight, int age, String allergies) {
+    private void savePatientInformation(String name, String birthday, String height, String weight, int age, String allergies, int temp, String bloodP, String date) {
     	if (age <= 12) {
             System.out.println("Patient needs parental assistance");
             return; // Exit the method if patient age is 12 or younger
         }
-        String patientInfo = name + "," + birthday + ",PATIENT," + height + "," + weight + "," + age + "," + allergies + "\n";
-        try (RandomAccessFile file = new RandomAccessFile(new File("user.txt"), "rw")) {
+        String patientInfo = name + "," + birthday + ",PATIENT," + height + "," + weight + "," + age + "," + allergies + "," + temp + "," + bloodP + "," + date + "\n";
+        try (RandomAccessFile file = new RandomAccessFile(new File("visits.txt"), "rw")) {
             long fileLength = file.length();
             if (fileLength > 0) {
                 file.seek(fileLength - 1);

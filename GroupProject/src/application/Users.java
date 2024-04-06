@@ -27,19 +27,15 @@ public class Users {
                 UserType userType = UserType.valueOf(parts[2].trim());
                 User user;
                 switch (userType) {
-                    case PATIENT:
-                        // Parse additional patient information
-                        int height = Integer.parseInt(parts[3].trim());
-                        int weight = Integer.parseInt(parts[4].trim());
-                        int age = Integer.parseInt(parts[5].trim());
-                        String allergies = parts[6].trim();
-                        user = new Patient(name, id, userType, height, weight, age, allergies);
-                        break;
-                    default:
-                        user = new User(name, id, userType);
-                        break;
-                }
-                userList.add(user);
+                case PATIENT:
+                    user = new Patient(name, id, userType);
+                    break;
+                default:
+                    user = new User(name, id, userType);
+                    break;
+            }
+            userList.add(user);
+        
             }
         } catch (IOException e) {
             System.err.println("Error reading file: " + e.getMessage());
@@ -96,12 +92,9 @@ public class Users {
         private int age;
         private String allergies;
 
-        public Patient(String name, String id, UserType userType, int height, int weight, int age, String allergies) {
+        public Patient(String name, String id, UserType userType) {
             super(name, id, userType);
-            this.height = height;
-            this.weight = weight;
-            this.age = age;
-            this.allergies = allergies;
+
         }
 
         public int getHeight() {

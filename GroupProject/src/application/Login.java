@@ -116,7 +116,7 @@ public class Login extends Application {
     }
     
     private void addUser(String name, String birthday) {
-    	String patientInfo = name + "," + birthday + ",PATIENT,0,0,0,N/A\n";
+    	String patientInfo = name + "," + birthday + ",PATIENT\n";
         try (RandomAccessFile file = new RandomAccessFile(new File("user.txt"), "rw")) {
             long fileLength = file.length();
             if (fileLength > 0) {
