@@ -116,7 +116,7 @@ public class Login extends Application {
     }
     
     private void addUser(String name, String birthday) {
-    	String patientInfo = name + "," + birthday + ",PATIENT,NONE,NONE,NONE\n";
+    	String patientInfo = name + "," + birthday + ",PATIENT\n";
         try (RandomAccessFile file = new RandomAccessFile(new File("user.txt"), "rw")) {
             long fileLength = file.length();
             if (fileLength > 0) {
@@ -127,6 +127,20 @@ public class Login extends Application {
                 }
             }
             file.writeBytes(patientInfo);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        String pastInfo = name + "," + birthday + ",PATIENT,NONE,NONE,NONE\n";
+        try (RandomAccessFile file = new RandomAccessFile(new File("past.txt"), "rw")) {
+            long fileLength = file.length();
+            if (fileLength > 0) {
+                file.seek(fileLength - 1);
+                char lastChar = (char) file.read();
+                if (lastChar != '\n') {
+                    file.writeBytes("\n");
+                }
+            }
+            file.writeBytes(pastInfo);
             System.out.println("Patient information saved successfully.");
         } catch (IOException e) {
             e.printStackTrace();
