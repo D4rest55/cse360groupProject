@@ -25,23 +25,45 @@ public class Users {
             String line;
             while ((line = br.readLine()) != null) {
                 String[] parts = line.split(",");
-                String name = parts[0].trim();
-                String id = parts[1].trim();
-                UserType userType = UserType.valueOf(parts[2].trim());
-                User user;
-                switch (userType) {
-                case PATIENT:
-                	 String pasthistory = parts[3].trim();
-                     String prevMeds = parts[4].trim();
-                     String immunization = parts[5].trim();
-                     user = new Patient(name, id, userType, pasthistory, prevMeds, immunization);
-                     break;
-                default:
-                    user = new User(name, id, userType);
-                    break;
-            }
-            userList.add(user);
-        
+                if (parts.length >= 3) {
+                    String name = parts[0].trim();
+                    String id = parts[1].trim();
+                    UserType userType = UserType.valueOf(parts[2].trim());
+                    User user;
+                    switch (userType) {
+                        case PATIENT:
+                            String pasthistory = "NONE";
+                            String prevMeds = "NONE";
+                            String immunization = "NONE";
+                            if (parts.length >= 6) {
+                                pasthistory = parts[3].trim();
+                                prevMeds = parts[4].trim();
+                                immunization = parts[5].trim();
+                            }
+                            // Read additional information from past.txt
+                            try (BufferedReader pastReader = new BufferedReader(new FileReader("past.txt"))) {
+                                String pastLine;
+                                while ((pastLine = pastReader.readLine()) != null) {
+                                    // Assuming past.txt has data in the format "name,birthday,pasthistory,prevMeds,immunization"
+                                    String[] pastParts = pastLine.split(",");
+                                    if (pastParts.length >= 3 && pastParts[0].trim().equals(name)) {
+                                        pasthistory = pastParts[3].trim();
+                                        prevMeds = pastParts[4].trim();
+                                        immunization = pastParts[5].trim();
+                                        break;
+                                    }
+                                }
+                            }
+                            user = new Patient(name, id, userType, pasthistory, prevMeds, immunization);
+                            break;
+                        default:
+                            user = new User(name, id, userType);
+                            break;
+                    }
+                    userList.add(user);
+                } else {
+                    System.err.println("Invalid data format: " + line);
+                }
             }
         } catch (IOException e) {
             System.err.println("Error reading file: " + e.getMessage());
@@ -49,6 +71,7 @@ public class Users {
             System.err.println("Invalid user type in file: " + e.getMessage());
         }
     }
+
 
     public void addUser(User user) {
         userList.add(user);

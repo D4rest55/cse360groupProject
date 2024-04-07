@@ -155,7 +155,9 @@ public class Login extends Application {
     }
 
     private void openDoctorPortal() {
-        
+    	Doctor doctorPortal = new Doctor();
+        doctorPortal.start(new Stage());
+        primaryStage.close();
     }
 
     
