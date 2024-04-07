@@ -71,16 +71,22 @@ public class Doctor extends Application {
         TextField immunizationsTextField = new TextField();
         grid.add(immunizationsTextField, 1, 5);
 
+        Label examDateLabel = new Label("Exam Date:");
+        grid.add(examDateLabel, 0, 6);
+        
+        TextField examDate = new TextField();
+        grid.add(examDate, 1, 6);
+
         Label findingsLabel = new Label("Visit Findings:");
-        grid.add(findingsLabel, 0, 6);
+        grid.add(findingsLabel, 0, 7);
 
         TextArea findingsTextArea = new TextArea();
         findingsTextArea.setPrefRowCount(10);
         findingsTextArea.setWrapText(true);
-        grid.add(findingsTextArea, 0, 7, 2, 1);
+        grid.add(findingsTextArea, 0, 8, 2, 1);
 
         Button saveButton = new Button("Save");
-        grid.add(saveButton, 1, 8);
+        grid.add(saveButton, 0, 9);
         
         saveButton.setOnAction(e -> {
             String name = nameTextField.getText();
@@ -89,9 +95,10 @@ public class Doctor extends Application {
             String healthHistory = healthHistoryTextField.getText();
             String medication = medicationTextField.getText();
             String immunizations = immunizationsTextField.getText();
+            String date = examDate.getText();
 
             users.displayPatientInformation(name, grid);
-            savePatientInformation(name, birthday, visitFindings, healthHistory, medication, immunizations);
+            savePatientInformation(name, birthday, visitFindings, healthHistory, medication, immunizations, date);
         });
 
         Scene scene = new Scene(grid, 500, 400);
@@ -99,8 +106,8 @@ public class Doctor extends Application {
         primaryStage.show();
     }
     
-    private void savePatientInformation(String name, String birthday, String visitFindings, String healthHistory, String medication, String immunizations) {
-        String patientInfo = name + "," + birthday + ",PATIENT," + "," + healthHistory + "," + medication + "," + immunizations + "\n";
+    private void savePatientInformation(String name, String birthday, String visitFindings, String healthHistory, String medication, String immunizations, String date) {
+        String patientInfo = name + "," + birthday + ",PATIENT," + "," + healthHistory + "," + medication + "," + immunizations + "," + date + "\n";
         try (RandomAccessFile file = new RandomAccessFile(new File("past.txt"), "rw")) {
             long fileLength = file.length();
             if (fileLength > 0) {
