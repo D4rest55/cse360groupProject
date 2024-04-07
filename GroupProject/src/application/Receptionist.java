@@ -22,10 +22,12 @@ import java.io.RandomAccessFile;
 public class Receptionist extends Application {
 
     private Stage primaryStage;
+    private Users users;
 
     @Override
     public void start(Stage primaryStage) {
         this.primaryStage = primaryStage;
+        this.users = new Users();
         primaryStage.setTitle("Nurse Page");
 
         GridPane grid = new GridPane();
@@ -84,26 +86,32 @@ public class Receptionist extends Application {
         TextField emailTextField = new TextField();
         grid.add(emailTextField, 1, 6);
         
+        Label healthLabel = new Label("Health Concerns:");
+        grid.add(healthLabel, 0, 7);
+
+        TextField healthTextField = new TextField();
+        grid.add(healthTextField, 1, 7);
+        
         Label bodyTempLabel = new Label("Body Temp:");
-        grid.add(bodyTempLabel, 0, 7);
+        grid.add(bodyTempLabel, 0, 8);
         
         TextField bodyTempTextField = new TextField();
-        grid.add(bodyTempTextField, 1, 7);
+        grid.add(bodyTempTextField, 1, 8);
         
         Label bloodLabel = new Label("Blood Pressure:");
-        grid.add(bloodLabel, 0, 8);
+        grid.add(bloodLabel, 0, 9);
         
         TextField bloodTextField = new TextField();
-        grid.add(bloodTextField, 1, 8);
+        grid.add(bloodTextField, 1, 9);
         
         Label dateLabel = new Label("Date:");
-        grid.add(dateLabel, 0, 9);
+        grid.add(dateLabel, 0, 10);
         
         TextField dateTextField = new TextField();
-        grid.add(dateTextField, 1, 9);
+        grid.add(dateTextField, 1, 10);
 
         Button saveButton = new Button("Save");
-        grid.add(saveButton, 1, 10);
+        grid.add(saveButton, 1, 11);
 
         
         saveButton.setOnAction(e -> {
@@ -113,15 +121,17 @@ public class Receptionist extends Application {
             String weight = weightTextField.getText();
             int age = Integer.parseInt(ageTextField.getText());
             String allergies = emailTextField.getText();
+            String health = healthTextField.getText();
             int temp = Integer.parseInt(bodyTempTextField.getText());
             String bloodP = bloodTextField.getText();
             String date = dateTextField.getText();
             //deletePatient(name, birthday, height, weight, age, allergies);
-            savePatientInformation(name, birthday, height, weight, age, allergies, temp, bloodP, date);
+            savePatientInformation(name, birthday, height, weight, age, allergies, health,  temp, bloodP, date);
+            users.displayPatientInformation(name, grid);
             
         });
 
-        Scene scene = new Scene(grid, 500, 400);
+        Scene scene = new Scene(grid, 650, 500);
         primaryStage.setScene(scene);
         primaryStage.show();
     }
@@ -157,12 +167,12 @@ public class Receptionist extends Application {
         }
     }
 
-    private void savePatientInformation(String name, String birthday, String height, String weight, int age, String allergies, int temp, String bloodP, String date) {
+    private void savePatientInformation(String name, String birthday, String height, String weight, int age, String allergies, String health, int temp, String bloodP, String date) {
     	if (age <= 12) {
             System.out.println("Patient needs parental assistance");
             return; // Exit the method if patient age is 12 or younger
         }
-        String patientInfo = name + "," + birthday + ",PATIENT," + height + "," + weight + "," + age + "," + allergies + "," + temp + "," + bloodP + "," + date + "\n";
+        String patientInfo = name + "," + birthday + ",PATIENT," + height + "," + weight + "," + age + "," + allergies + "," + health + "," + temp + "," + bloodP + "," + date + "\n";
         try (RandomAccessFile file = new RandomAccessFile(new File("visits.txt"), "rw")) {
             long fileLength = file.length();
             if (fileLength > 0) {
@@ -178,6 +188,11 @@ public class Receptionist extends Application {
             e.printStackTrace();
         }
     }
+    
+    public void openPatientNursePortal() {
+    	
+    }
+    
 
     public static void main(String[] args) {
         launch(args);

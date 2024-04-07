@@ -6,6 +6,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javafx.scene.control.Label;
+import javafx.scene.layout.GridPane;
+
 public class Users {
     private List<User> userList;
     private List<Patient> readyPatients;
@@ -28,8 +31,11 @@ public class Users {
                 User user;
                 switch (userType) {
                 case PATIENT:
-                    user = new Patient(name, id, userType);
-                    break;
+                	 String pasthistory = parts[3].trim();
+                     String prevMeds = parts[4].trim();
+                     String immunization = parts[5].trim();
+                     user = new Patient(name, id, userType, pasthistory, prevMeds, immunization);
+                     break;
                 default:
                     user = new User(name, id, userType);
                     break;
@@ -87,31 +93,29 @@ public class Users {
 
     // Subclass for Patient with additional fields
     public static class Patient extends User {
-        private int height;
-        private int weight;
-        private int age;
-        private String allergies;
+        private String pasthistory;
+        private String prevMeds;
+        private String immunization;
 
-        public Patient(String name, String id, UserType userType) {
+        public Patient(String name, String id, UserType userType, String pasthistory,String prevMeds, String immunization) {
             super(name, id, userType);
-
+            this.pasthistory = pasthistory;
+            this.prevMeds = prevMeds;
+            this.immunization = immunization;
         }
 
-        public int getHeight() {
-            return height;
+        public String getpastHistory() {
+            return pasthistory;
         }
 
-        public int getWeight() {
-            return weight;
+        public String getprevMeds() {
+            return prevMeds;
         }
 
-        public int getAge() {
-            return age;
+        public String getImmunization() {
+            return immunization;
         }
 
-        public String getAllergies() {
-            return allergies;
-        }
     }
     
     public void addPatientToReadyList(Patient patient) {
@@ -120,6 +124,32 @@ public class Users {
     
     public List<Patient> getReadyPatients() {
         return readyPatients;
+    }
+    
+    void displayPatientInformation(String name, GridPane grid) {
+        for (User user : userList) {
+            if (user.getName().equals(name) && user instanceof Patient) {
+                Patient patient = (Patient) user;
+                addLabelToGrid(grid, "Name:", 2, 0);
+                addLabelToGrid(grid, patient.getName(), 3, 0);
+                addLabelToGrid(grid, "Birthday:", 2, 1);
+                addLabelToGrid(grid, patient.getId(), 3, 1);
+                addLabelToGrid(grid, "Past History:", 2, 2);
+                addLabelToGrid(grid, patient.getpastHistory(), 3, 2);
+                addLabelToGrid(grid, "Previous Medications:", 2, 3);
+                addLabelToGrid(grid, patient.getprevMeds(), 3, 3);
+                addLabelToGrid(grid, "Immunization:", 2, 4);
+                addLabelToGrid(grid, patient.getImmunization(), 3, 4);
+                // Add other properties as needed
+                return; // Stop after finding the user
+            }
+        }
+        addLabelToGrid(grid, "Patient with name " + name + " not found.", 2, 0);
+    }
+
+    private void addLabelToGrid(GridPane grid, String text, int column, int row) {
+        Label label = new Label(text);
+        grid.add(label, column, row);
     }
 
     // Enum for user types
