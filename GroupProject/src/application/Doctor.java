@@ -98,8 +98,6 @@ public class Doctor extends Application {
         rightSide.setPadding(new Insets(95, 95, 95, 95));
         GridPane.setColumnSpan(titleLabel, 2);
         
-        
-        
         Label messageLabel = new Label("Message Patient");
         rightSide.add(messageLabel, 0, 0);
         messageLabel.setFont(Font.font("Arial", 20));
@@ -131,6 +129,13 @@ public class Doctor extends Application {
             users.displayPatientInformation(name, grid);
             savePatientInformation(name, birthday, visitFindings, healthHistory, medication, immunizations, date);
         });
+        
+        send.setOnAction(e -> {
+            String patientName = patient.getText();
+            String message = textMessage.getText();
+
+            savePatientInformation(patientName, message);
+        });
 
         borderPane.setCenter(grid);
         borderPane.setRight(rightSide);
@@ -152,6 +157,24 @@ public class Doctor extends Application {
             }
             file.writeBytes(patientInfo);
             System.out.println("Visit findings saved successfully.");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    private void savePatientInformation(String patientID, String messages) {
+        String patientInfo = patientID + ":" + messages;
+        try (RandomAccessFile file = new RandomAccessFile(new File("message.txt"), "rw")) {
+            long fileLength = file.length();
+            if (fileLength > 0) {
+                file.seek(fileLength - 1);
+                char lastChar = (char) file.read();
+                if (lastChar != '\n') {
+                    file.writeBytes("\n");
+                }
+            }
+            file.writeBytes(patientInfo);
+            System.out.println("Message sent Successfully");
         } catch (IOException e) {
             e.printStackTrace();
         }
