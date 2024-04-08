@@ -22,13 +22,13 @@ public class Patient extends Application {
 
 	private Stage primaryStage;
 	private GridPane grid;
-   // private Users.User user;
+	private Users.User user;
     private Label messageLabel, contactLabel, summaryLabel, welcome;
     Button send, generate, changeInfo;
 
-	/*
-	 * public Patient(Users.User user) { this.user = user; }
-	 */
+	
+	 public Patient(Users.User user) { this.user = user; }
+	
     @Override
     public void start(Stage primaryStage) {
         this.primaryStage = primaryStage;
