@@ -7,7 +7,8 @@ import java.io.File;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Scene;
+import javafx.scene.Scene;  
+import javafx.scene.layout.VBox;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
@@ -16,6 +17,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import javafx.scene.layout.BorderPane;
 
 public class Doctor extends Application {
 
@@ -26,7 +28,8 @@ public class Doctor extends Application {
     	this.primaryStage = primaryStage;
         this.users = new Users();
         primaryStage.setTitle("Doctor's Portal");
-
+        BorderPane borderPane = new BorderPane();                      
+        borderPane.setStyle("-fx-background-color: lightblue;");
         GridPane grid = new GridPane();
         grid.setAlignment(Pos.CENTER);
         grid.setHgap(10);
@@ -87,6 +90,34 @@ public class Doctor extends Application {
 
         Button saveButton = new Button("Save");
         grid.add(saveButton, 0, 9);
+             
+        GridPane rightSide = new GridPane();
+        //rightSide.setAlignment(Pos.);
+        rightSide.setHgap(10);
+        rightSide.setVgap(10);
+        rightSide.setPadding(new Insets(95, 95, 95, 95));
+        GridPane.setColumnSpan(titleLabel, 2);
+        
+        
+        
+        Label messageLabel = new Label("Message Patient");
+        rightSide.add(messageLabel, 0, 0);
+        messageLabel.setFont(Font.font("Arial", 20));
+        messageLabel.setTextFill(Color.WHITE);
+        messageLabel.setAlignment(Pos.CENTER);
+		 
+		TextField patient = new TextField(); 
+		rightSide.add(patient, 0, 1);
+		 
+        TextArea textMessage = new TextArea();
+        textMessage.setPrefWidth(100);
+        textMessage.setPrefHeight(300);
+        textMessage.setPrefRowCount(10);
+        textMessage.setWrapText(true);
+        rightSide.add(textMessage, 0, 2, 1, 1);
+        
+        Button send = new Button("Send Message");
+        rightSide.add(send, 0, 3);
         
         saveButton.setOnAction(e -> {
             String name = nameTextField.getText();
@@ -101,7 +132,9 @@ public class Doctor extends Application {
             savePatientInformation(name, birthday, visitFindings, healthHistory, medication, immunizations, date);
         });
 
-        Scene scene = new Scene(grid, 500, 400);
+        borderPane.setCenter(grid);
+        borderPane.setRight(rightSide);
+        Scene scene = new Scene(borderPane, 800, 700);
         primaryStage.setScene(scene);
         primaryStage.show();
     }
