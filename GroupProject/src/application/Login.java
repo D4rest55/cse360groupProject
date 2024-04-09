@@ -162,12 +162,6 @@ public class Login extends Application {
     	
     }
 
-    private void openCTechPortal() {
-        CTech cTechPortal = new CTech(users.getReadyPatients());
-        cTechPortal.start(new Stage());
-        primaryStage.close();
-    }
-
     private void openDoctorPortal() {
     	Doctor doctorPortal = new Doctor();
         doctorPortal.start(new Stage());

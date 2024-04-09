@@ -186,9 +186,17 @@ public class Patient extends Application {
         	 {
         		 String line = scan.nextLine();
         		 String[] splitLine = line.split(",");
+        		 String height = splitLine[3];
+        		 String weight = splitLine[4];
+        		 String age = splitLine[5];
+        		 String allergies = splitLine[6];
+        		 String concern = splitLine[7];
+        		 String temp = splitLine[8];
+        		 String pressure = splitLine[9];
+        		 String date = splitLine[10];
         		 if(splitLine[0].equals(user.getName()))
              	 {
-             		 summary.appendText("\n" + line + "\n");
+        			 summary.appendText("\nHeight: " + height + "\nWeight: " + weight + "\nAge: " + age + "\nAllergies: " + allergies + "\nHealth Concerns: " + concern + "\nBody Temp: " + temp + "\nBlood Pressure: " + pressure + "\nDate: " + date + "\n");
              	 }
         		 
              }
