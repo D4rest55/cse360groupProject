@@ -118,9 +118,12 @@ public class Patient extends Application {
         {
         	 while( scan.hasNextLine()) {
              	String line = scan.nextLine();
-             	if(line.contains(user.getName()))
+             	if(line.contains(user.getName())
+  //i know this looks dumb but its so we dont forget to talk about it.   			
+             			//&& line.contains(user.getId())
+             			)
              	{
-             		textMessage.setText(line);
+             		textMessage.appendText("\n" + line + "\n");
              	}
              }
         }catch (IOException e) {
@@ -140,12 +143,15 @@ public class Patient extends Application {
         File visits = new File("./visits.txt");
         try(Scanner scan = new Scanner(visits);)
         {
-        	 while( scan.hasNextLine()) {
-             	String line = scan.nextLine();
-             	if(line.contains(user.getName()))
-             	{
-             		summary.setText(line);
-             	}
+        	
+        	 while( scan.hasNextLine()) 
+        	 {
+        		 String line = scan.nextLine();
+        		 if(line.contains(user.getName())&& line.contains(user.getId()))
+             	 {
+             		 summary.appendText("\n" + line + "\n");
+             	 }
+        		 
              }
         }catch (IOException e) {
             e.printStackTrace();
