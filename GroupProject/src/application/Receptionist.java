@@ -227,10 +227,13 @@ public class Receptionist extends Application {
         		 String prevMeds = splitLine[4];
         		 String immunizations = splitLine[5];
         		 String date = splitLine[6];
-        		 if(line.contains(name)&& line.contains(birthday))
-             	 {
-        			 summary.appendText("\nHealth History: " + healthHistory + "\nPrevious Medications: " + prevMeds + "\nImmunizations: " + immunizations + "\nDate: " + date + "\n");
-             	 }
+        		 if (date.equals("NONE") && immunizations.equals("NONE") && prevMeds.equals("NONE") && healthHistory.equals("NONE")) {
+        			    // All fields are "NONE", handle this case if needed
+        			} else {
+        			    if (line.contains(name) && line.contains(birthday)) {
+        			        summary.appendText("\nHealth History: " + healthHistory + "\nPrevious Medications: " + prevMeds + "\nImmunizations: " + immunizations + "\nDate: " + date + "\n");
+        			    }
+        			}
         		 
              }
         }catch (IOException e) {

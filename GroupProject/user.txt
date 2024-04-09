@@ -13,3 +13,4 @@ Test Doctor,2000,DOCTOR
 Bob Ross,1998,PATIENT
 Bradley Phelps,11/11/1111,PATIENT
 Dylan Forrest,11/14/2003,PATIENT
+Test Patient,1000,PATIENT
