@@ -126,12 +126,22 @@ public class Receptionist extends Application {
             String birthday = idTextField.getText();
             String height = heightTextField.getText();
             String weight = weightTextField.getText();
-            int age = Integer.parseInt(ageTextField.getText());
+            String ageText = ageTextField.getText();
             String allergies = emailTextField.getText();
             String health = healthTextField.getText();
-            int temp = Integer.parseInt(bodyTempTextField.getText());
+            String tempText = bodyTempTextField.getText();
             String bloodP = bloodTextField.getText();
             String date = dateTextField.getText();
+            
+            if (ageText.isEmpty() || tempText.isEmpty()) {
+                System.out.println("Please fill in all fields.");
+                return;
+            }
+
+            int age = Integer.parseInt(ageText);
+            int temp = Integer.parseInt(tempText);
+            
+            
             //deletePatient(name, birthday, height, weight, age, allergies);
             savePatientInformation(name, birthday, height, weight, age, allergies, health,  temp, bloodP, date);
             //users.displayPatientInformation(name, grid);
@@ -176,6 +186,10 @@ public class Receptionist extends Application {
     }
 
     private void savePatientInformation(String name, String birthday, String height, String weight, int age, String allergies, String health, int temp, String bloodP, String date) {
+    	if (name.isEmpty() || birthday.isEmpty() || height.isEmpty() || weight.isEmpty() || allergies.isEmpty() || health.isEmpty() || bloodP.isEmpty() || date.isEmpty()) {
+            System.out.println("Please fill in all fields.");
+            return;
+        }
     	if (age <= 12) {
             System.out.println("Patient needs parental assistance");
             return; // Exit the method if patient age is 12 or younger
@@ -198,6 +212,9 @@ public class Receptionist extends Application {
     }
     
     public void display(String name, String birthday, TextArea summary) {
+    	if (name.isEmpty() || birthday.isEmpty()) {
+            return;
+        }
     	File visits = new File("./past.txt");
         try(Scanner scan = new Scanner(visits);)
         {
@@ -205,9 +222,14 @@ public class Receptionist extends Application {
         	 while( scan.hasNextLine()) 
         	 {
         		 String line = scan.nextLine();
+        		 String[] splitLine = line.split(",");
+        		 String healthHistory = splitLine[3];
+        		 String prevMeds = splitLine[4];
+        		 String immunizations = splitLine[5];
+        		 String date = splitLine[6];
         		 if(line.contains(name)&& line.contains(birthday))
              	 {
-             		 summary.appendText("\n" + line + "\n");
+        			 summary.appendText("\nHealth History: " + healthHistory + "\nPrevious Medications: " + prevMeds + "\nImmunizations: " + immunizations + "\nDate: " + date + "\n");
              	 }
         		 
              }

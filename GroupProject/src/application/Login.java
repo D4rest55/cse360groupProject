@@ -93,6 +93,10 @@ public class Login extends Application {
 
     
     private void login(String fullName, String id) {
+    	if (fullName.isEmpty() || id.isEmpty()) {
+            System.out.println("Please fill in all fields.");
+            return;
+        }
         Users.User user = users.findUserByNameAndId(fullName, id);
         if (user != null) {
         	if (user.getUserType() == Users.UserType.PATIENT) {
@@ -116,6 +120,10 @@ public class Login extends Application {
     }
     
     private void addUser(String name, String birthday) {
+    	if (name.isEmpty() || birthday.isEmpty()) {
+            System.out.println("Please fill in all fields.");
+            return;
+        }
     	String patientInfo = name + "," + birthday + ",PATIENT\n";
         try (RandomAccessFile file = new RandomAccessFile(new File("user.txt"), "rw")) {
             long fileLength = file.length();
@@ -130,7 +138,7 @@ public class Login extends Application {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        String pastInfo = name + "," + birthday + ",PATIENT,NONE,NONE,NONE\n";
+        String pastInfo = name + "," + birthday + ",PATIENT,NONE,NONE,NONE,NONE\n";
         try (RandomAccessFile file = new RandomAccessFile(new File("past.txt"), "rw")) {
             long fileLength = file.length();
             if (fileLength > 0) {

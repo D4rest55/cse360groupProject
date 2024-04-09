@@ -130,7 +130,7 @@ public class Doctor extends Application {
             String immunizations = immunizationsTextField.getText();
             String date = examDate.getText();
 
-            users.displayPatientInformation(name, grid);
+            //users.displayPatientInformation(name, grid);
             savePatientInformation(name, birthday, visitFindings, healthHistory, medication, immunizations, date);
         });
         
@@ -150,6 +150,10 @@ public class Doctor extends Application {
     }
     
     private void savePatientInformation(String name, String birthday, String visitFindings, String healthHistory, String medication, String immunizations, String date) {
+    	if (name.isEmpty() || birthday.isEmpty() || visitFindings.isEmpty() || healthHistory.isEmpty() || medication.isEmpty() || immunizations.isEmpty() || date.isEmpty()) {
+            System.out.println("Please fill in all fields.");
+            return;
+        }
         String patientInfo = name + "," + birthday + ",PATIENT," + "," + healthHistory + "," + medication + "," + immunizations + "," + date + "\n";
         try (RandomAccessFile file = new RandomAccessFile(new File("past.txt"), "rw")) {
             long fileLength = file.length();
@@ -168,6 +172,10 @@ public class Doctor extends Application {
     }
     
     private void saveMessageInformation(String patientID, String patientBirth, String messages) {
+    	if (patientID.isEmpty() || patientBirth.isEmpty() || messages.isEmpty()) {
+            System.out.println("Please fill in all fields.");
+            return;
+        }
         String patientInfo = patientID + "," + patientBirth + ": " + messages;
         try (RandomAccessFile file = new RandomAccessFile(new File("message.txt"), "rw")) {
             long fileLength = file.length();
