@@ -6,6 +6,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
@@ -18,6 +19,7 @@ import java.io.*;
 import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.util.Scanner;
 
 public class Receptionist extends Application {
 
@@ -112,7 +114,12 @@ public class Receptionist extends Application {
 
         Button saveButton = new Button("Save");
         grid.add(saveButton, 1, 11);
-
+        
+        TextArea summary = new TextArea();
+        summary.setPrefWidth(300);
+        summary.setPrefHeight(600);
+        summary.setWrapText(true);
+        grid.add(summary, 2, 0, 1, 11);
         
         saveButton.setOnAction(e -> {
             String name = nameTextField.getText();
@@ -127,7 +134,8 @@ public class Receptionist extends Application {
             String date = dateTextField.getText();
             //deletePatient(name, birthday, height, weight, age, allergies);
             savePatientInformation(name, birthday, height, weight, age, allergies, health,  temp, bloodP, date);
-            users.displayPatientInformation(name, grid);
+            //users.displayPatientInformation(name, grid);
+            display(name, birthday, summary);
             
         });
 
@@ -189,6 +197,24 @@ public class Receptionist extends Application {
         }
     }
     
+    public void display(String name, String birthday, TextArea summary) {
+    	File visits = new File("./past.txt");
+        try(Scanner scan = new Scanner(visits);)
+        {
+        	
+        	 while( scan.hasNextLine()) 
+        	 {
+        		 String line = scan.nextLine();
+        		 if(line.contains(name)&& line.contains(birthday))
+             	 {
+             		 summary.appendText("\n" + line + "\n");
+             	 }
+        		 
+             }
+        }catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
     public void openPatientNursePortal() {
     	
     }

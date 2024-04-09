@@ -118,10 +118,10 @@ public class Patient extends Application {
         {
         	 while( scan.hasNextLine()) {
              	String line = scan.nextLine();
-             	if(line.contains(user.getName())
+             	if(line.contains(user.getName())&& line.contains(user.getId()))
   //i know this looks dumb but its so we dont forget to talk about it.   			
              			//&& line.contains(user.getId())
-             			)
+             			
              	{
              		textMessage.appendText("\n" + line + "\n");
              	}

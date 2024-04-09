@@ -106,16 +106,19 @@ public class Doctor extends Application {
 		 
 		TextField patient = new TextField(); 
 		rightSide.add(patient, 0, 1);
+		
+		TextField patientbirth = new TextField();
+		rightSide.add(patientbirth, 0, 2);
 		 
         TextArea textMessage = new TextArea();
         textMessage.setPrefWidth(100);
         textMessage.setPrefHeight(300);
         textMessage.setPrefRowCount(10);
         textMessage.setWrapText(true);
-        rightSide.add(textMessage, 0, 2, 1, 1);
+        rightSide.add(textMessage, 0, 3, 1, 1);
         
         Button send = new Button("Send Message");
-        rightSide.add(send, 0, 3);
+        rightSide.add(send, 0, 4);
         
         saveButton.setOnAction(e -> {
             String name = nameTextField.getText();
@@ -133,8 +136,9 @@ public class Doctor extends Application {
         send.setOnAction(e -> {
             String patientName = patient.getText();
             String message = textMessage.getText();
+            String patientBirth = patientbirth.getText();
 
-            savePatientInformation(patientName, message);
+            saveMessageInformation(patientName, patientBirth, message);
         });
 
         borderPane.setCenter(grid);
@@ -162,8 +166,8 @@ public class Doctor extends Application {
         }
     }
     
-    private void savePatientInformation(String patientID, String messages) {
-        String patientInfo = patientID + ": " + messages;
+    private void saveMessageInformation(String patientID, String patientBirth, String messages) {
+        String patientInfo = patientID + "," + patientBirth + ": " + messages;
         try (RandomAccessFile file = new RandomAccessFile(new File("message.txt"), "rw")) {
             long fileLength = file.length();
             if (fileLength > 0) {
