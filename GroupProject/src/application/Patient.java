@@ -1,5 +1,10 @@
 package application;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.Scanner;
+
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -82,12 +87,45 @@ public class Patient extends Application {
         textMessage.setWrapText(true);
         grid.add(textMessage, 1, 1, 1, 1);
         
+       // Message read
+        
+        File message = new File("./message.txt");
+        try(Scanner scan = new Scanner(message);)
+        {
+        	 while( scan.hasNextLine()) {
+             	String line = scan.nextLine();
+             	if(line.contains(user.getName()))
+             	{
+             		textMessage.setText(line);
+             	}
+             }
+        }catch (IOException e) {
+            e.printStackTrace();
+        }
+        
+        
+       
         TextArea summary = new TextArea();
         summary.setPrefWidth(100);
         summary.setPrefHeight(300);
         summary.setPrefRowCount(10);
         summary.setWrapText(true);
         grid.add(summary, 2, 1, 1, 1);
+        
+       // visit summary read
+        File visits = new File("./visits.txt");
+        try(Scanner scan = new Scanner(visits);)
+        {
+        	 while( scan.hasNextLine()) {
+             	String line = scan.nextLine();
+             	if(line.contains(user.getName()))
+             	{
+             		summary.setText(line);
+             	}
+             }
+        }catch (IOException e) {
+            e.printStackTrace();
+        }
         
         send = new Button("Send Message");
         grid.add(send, 1, 2);

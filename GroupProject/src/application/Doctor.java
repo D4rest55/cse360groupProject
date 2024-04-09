@@ -163,7 +163,7 @@ public class Doctor extends Application {
     }
     
     private void savePatientInformation(String patientID, String messages) {
-        String patientInfo = patientID + ":" + messages;
+        String patientInfo = patientID + ": " + messages;
         try (RandomAccessFile file = new RandomAccessFile(new File("message.txt"), "rw")) {
             long fileLength = file.length();
             if (fileLength > 0) {
