@@ -20,6 +20,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import java.io.*;
 
 
 public class Patient extends Application {
@@ -28,7 +29,7 @@ public class Patient extends Application {
 	private Stage primaryStage;
 	private GridPane grid;
 	private Users.User user;
-    private Label messageLabel, contactLabel, summaryLabel, welcome;
+    private Label messageLabel, contactLabel, insuranceLabel, pharmacyLabel, summaryLabel, welcome;
     Button send, generate, changeInfo;
 
 	
@@ -59,6 +60,16 @@ public class Patient extends Application {
         contactLabel.setTextFill(Color.WHITE);
         contactLabel.setAlignment(Pos.CENTER);
         
+        insuranceLabel = new Label("Insurance Information");
+        insuranceLabel.setFont(Font.font("Arial", 20));
+        insuranceLabel.setTextFill(Color.WHITE);
+        insuranceLabel.setAlignment(Pos.CENTER);
+        
+        pharmacyLabel = new Label("Pharmacy Information");
+        pharmacyLabel.setFont(Font.font("Arial", 20));
+        pharmacyLabel.setTextFill(Color.WHITE);
+        pharmacyLabel.setAlignment(Pos.CENTER);
+        
         messageLabel = new Label("Message Your Provider Here");
         messageLabel.setFont(Font.font("Arial", 20));
         messageLabel.setTextFill(Color.WHITE);
@@ -75,10 +86,23 @@ public class Patient extends Application {
         
         TextArea contacts = new TextArea();
         contacts.setPrefWidth(100);
-        contacts.setPrefHeight(300);
+        contacts.setPrefHeight(100);
         contacts.setPrefRowCount(10);
         contacts.setWrapText(true);
-        grid.add(contacts, 0, 1, 1, 1);
+        TextArea insurance = new TextArea();
+        insurance.setPrefWidth(100);
+        insurance.setPrefHeight(100);
+        insurance.setPrefRowCount(10);
+        TextArea pharmacy = new TextArea();
+        contacts.setWrapText(true);
+        pharmacy.setPrefWidth(100);
+        pharmacy.setPrefHeight(100);
+        pharmacy.setPrefRowCount(10);
+        pharmacy.setWrapText(true);
+        
+        VBox patientInfo = new VBox(10);
+        patientInfo.getChildren().addAll(contacts, insuranceLabel, insurance, pharmacyLabel, pharmacy);
+        grid.add(patientInfo, 0, 1, 1, 1);
         
         TextArea textMessage = new TextArea();
         textMessage.setPrefWidth(100);
@@ -133,8 +157,40 @@ public class Patient extends Application {
         generate = new Button("Generate Summary");
         grid.add(generate, 2, 2);
 
-        changeInfo = new Button("Change Contacts");
+        changeInfo = new Button("Update Info");
         grid.add(changeInfo, 0, 2);
+        
+        changeInfo.setOnAction(e -> {
+        	try {
+        		BufferedWriter bw = new BufferedWriter(new FileWriter("patientInfo.txt"));
+        		BufferedReader br = new BufferedReader(new FileReader("patientInfo.txt"));
+        		String lines = "";
+        		String line;
+        		boolean hasEntry = false;
+        		while((line = br.readLine()) != null) {
+        			String[] splitLine = line.split(",");
+        			if (splitLine[0] == user.getName()) {
+        				splitLine[1] = contacts.getText();
+        				splitLine[2] = insurance.getText();
+        				splitLine[3] = pharmacy.getText();
+        				hasEntry = true;
+        			}
+        			else {
+        				lines += line;
+        			}
+        		}
+        		if (!hasEntry) {
+        			lines += user.getName() + "," + contacts.getText() + "," + insurance.getText() + ","
+        					+ pharmacy.getText();
+        		}
+        		bw.write(lines);
+        		br.close();
+        		bw.close();
+        	}
+        	catch (IOException ioe) {
+        		System.out.println("Failed to update patient info");
+        	}
+        });
 
        // Label nameLabel = new Label("Welcome, " + user.getName());
        // nameLabel.setFont(Font.font("Arial", 16));
