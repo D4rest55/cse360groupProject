@@ -12,6 +12,7 @@ Carl Jacobs,2004,PATIENT
 Test Doctor,2000,DOCTOR
 Bob Ross,1998,PATIENT
 Bradley Phelps,11/11/1111,PATIENT
-Dylan Forrest,11/14/2003,PATIENT
+Dylan Forrest,11/11/2004,PATIENT
 Test Patient,1000,PATIENT
 Jack Montgomery,03/04/2004,PATIENT
+New Patient,2000,PATIENT
