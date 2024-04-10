@@ -2,6 +2,7 @@ package application;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.util.Scanner;
 import java.io.File;
 
 import javafx.application.Application;
@@ -121,6 +122,16 @@ public class Doctor extends Application {
         Button send = new Button("Send Message");
         rightSide.add(send, 0, 4);
         
+        Button view = new Button("View Messages");
+        rightSide.add(view, 0, 5);
+        
+        TextArea summary = new TextArea();
+        summary.setPrefWidth(400);
+        summary.setPrefHeight(300);
+        summary.setPrefRowCount(10);
+        summary.setWrapText(true);
+        grid.add(summary, 2, 0, 1, 11);
+        
         saveButton.setOnAction(e -> {
             String name = nameTextField.getText();
             String birthday = birthdayTextField.getText();
@@ -131,6 +142,7 @@ public class Doctor extends Application {
             String date = examDate.getText();
 
             //users.displayPatientInformation(name, grid);
+            display(name, birthday, summary);
             savePatientInformation(name, birthday, visitFindings, healthHistory, medication, immunizations, date);
         });
         
@@ -141,10 +153,17 @@ public class Doctor extends Application {
 
             saveMessageInformation(patientName, patientBirth, message);
         });
+        
+        view.setOnAction(e -> {
+        	String patientName = patient.getText();
+            //String message = textMessage.getText();
+            
+            view(patientName, textMessage);
+        });
 
-        borderPane.setCenter(grid);
+        borderPane.setLeft(grid);
         borderPane.setRight(rightSide);
-        Scene scene = new Scene(borderPane, 800, 700);
+        Scene scene = new Scene(borderPane, 1300, 700);
         primaryStage.setScene(scene);
         primaryStage.show();
     }
@@ -189,6 +208,56 @@ public class Doctor extends Application {
             file.writeBytes(patientInfo);
             System.out.println("Message sent Successfully");
         } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    
+    public void view(String name, TextArea textMessage) {
+    	File message = new File("./message.txt");
+        try (Scanner scan = new Scanner(message);) {
+            while (scan.hasNextLine()) {
+                String line = scan.nextLine();
+                String[] splitLine = line.split(":");
+                if (splitLine[0].equals(name))
+                // i know this looks dumb but its so we dont forget to talk about it.
+                // && line.contains(user.getId())
+
+                {
+                    textMessage.appendText("\n" + line + "\n");
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    public void display(String name, String birthday, TextArea summary) {
+    	if (name.isEmpty() || birthday.isEmpty()) {
+            return;
+        }
+    	File visits = new File("./past.txt");
+        try(Scanner scan = new Scanner(visits);)
+        {
+        	
+        	 while( scan.hasNextLine()) 
+        	 {
+        		 String line = scan.nextLine();
+        		 String[] splitLine = line.split(",");
+        		 String healthHistory = splitLine[3];
+        		 String prevMeds = splitLine[4];
+        		 String immunizations = splitLine[5];
+        		 String date = splitLine[6];
+        		 if (date.equals("NONE") && immunizations.equals("NONE") && prevMeds.equals("NONE") && healthHistory.equals("NONE")) {
+        			    // All fields are "NONE", handle this case if needed
+        			} else {
+        			    if (line.contains(name) && line.contains(birthday)) {
+        			        summary.appendText("\nHealth History: " + healthHistory + "\nPrevious Medications: " + prevMeds + "\nImmunizations: " + immunizations + "\nDate: " + date + "\n");
+        			    }
+        			}
+        		 
+             }
+        }catch (IOException e) {
             e.printStackTrace();
         }
     }
